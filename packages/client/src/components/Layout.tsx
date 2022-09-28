@@ -4,11 +4,11 @@ import './Layout.scss';
 GameLogicHelloWorld();
 
 function Layout() {
-  return (
-    <div className="contentContainer">
-      <GameBoard />
-    </div>
-  );
+    return (
+        <div className="contentContainer">
+            <GameBoard />
+        </div>
+    );
 }
 
 export default Layout;

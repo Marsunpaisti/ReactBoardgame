@@ -1,26 +1,26 @@
 .gameBoard {
-  position: relative;
-  flex: 1;
-  width: 100%;
-  border: 2px solid red;
-  overflow: hidden;
-  user-select: none;
+    position: relative;
+    flex: 1;
+    width: 100%;
+    border: 2px solid red;
+    overflow: hidden;
+    user-select: none;
 }
 
 .boardContent {
-  position: relative;
-  left: 50%;
-  top: 50%;
-  width: 0px;
-  height: 0px;
-  overflow: visible;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 0px;
+    height: 0px;
+    overflow: visible;
 }
 
 .boardItem {
-  min-width: max-content;
-  min-height: max-content;
-  width: max-content;
-  height: max-content;
-  overflow: visible;
-  border: 1px solid green;
+    min-width: max-content;
+    min-height: max-content;
+    width: max-content;
+    height: max-content;
+    overflow: visible;
+    border: 1px solid green;
 }
