@@ -6,6 +6,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:react/jsx-runtime"
     ],
@@ -17,7 +18,7 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "plugins": ["react", "@typescript-eslint"],
+    "plugins": ["react", "react-hooks", "@typescript-eslint"],
     "rules": {
         "react/prop-types": "off"
     }

@@ -1,17 +1,13 @@
 import { Vector2 } from '@math.gl/core';
-import {
-    PropsWithChildren,
-    useCallback,
-    useContext,
-    useEffect,
-    useRef,
-} from 'react';
+import { useCallback, useContext, useEffect, useRef } from 'react';
 import { GameBoardContext } from '../contexts/GameBoardContext';
 import './GameBoard.scss';
+import { RenderGameObject } from './GameObjectVisual';
 
 export const GameBoard = () => {
     const gameBoardRef = useRef<HTMLDivElement>(null);
-    const { cameraPosition, setCameraPosition } = useContext(GameBoardContext);
+    const { cameraPosition, setCameraPosition, gameState, gameObjectWalkPath } =
+        useContext(GameBoardContext);
 
     const onArrowKey = useCallback(
         (event: KeyboardEvent) => {
@@ -32,7 +28,7 @@ export const GameBoard = () => {
                     break;
             }
 
-            setCameraPosition((prev) => prev.add(offset).clone());
+            setCameraPosition((prev) => prev.clone().add(offset));
         },
         [setCameraPosition],
     );
@@ -42,38 +38,53 @@ export const GameBoard = () => {
         return () => document.removeEventListener('keydown', onArrowKey);
     }, []);
 
+    const onClick = useCallback(
+        (e: MouseEvent) => {
+            if (gameBoardRef.current == null) return;
+            const rect = gameBoardRef.current.getBoundingClientRect();
+            const boardCenter = new Vector2(
+                (rect.left + rect.right) / 2,
+                (rect.top + rect.bottom) / 2,
+            );
+            const offsetFromBoardCenter = new Vector2(
+                e.clientX,
+                e.clientY,
+            ).subtract(boardCenter);
+            const boardPosition = cameraPosition
+                .clone()
+                .add(offsetFromBoardCenter);
+            gameObjectWalkPath('MeepleGameObject1', [
+                new Vector2(0, 0),
+                boardPosition,
+            ]);
+        },
+        [gameBoardRef, cameraPosition, gameObjectWalkPath],
+    );
+
+    useEffect(() => {
+        if (gameBoardRef.current == null) return;
+
+        const boardRef = gameBoardRef.current;
+        boardRef.addEventListener('click', onClick);
+        return () => boardRef.removeEventListener('click', onClick);
+    }, [gameBoardRef, onClick]);
+
     return (
         <div className="gameBoard" ref={gameBoardRef}>
             <div
                 className="boardContent"
                 style={{
-                    transform: `translate(${cameraPosition.x}px, ${cameraPosition.y}px)`,
+                    transform: `translate(${-cameraPosition.x}px, ${-cameraPosition.y}px)`,
                 }}
             >
-                <GameBoardItem position={new Vector2()}>
-                    GameBoardItem
-                </GameBoardItem>
+                {Object.values(gameState.gameObjects).map((gob) => {
+                    const withTransitionDuration = {
+                        ...gob,
+                        transitionDuration: 500,
+                    };
+                    return RenderGameObject(withTransitionDuration);
+                })}
             </div>
-        </div>
-    );
-};
-
-export interface GameBoardItemProps extends PropsWithChildren {
-    position: Vector2;
-}
-
-export const GameBoardItem: React.FC<GameBoardItemProps> = ({
-    children,
-    position,
-}) => {
-    return (
-        <div
-            className="boardItem"
-            style={{
-                transform: `translate(${position.x}px, ${position.y}px) translate(-50%, -50%)`,
-            }}
-        >
-            {children}
         </div>
     );
 };
