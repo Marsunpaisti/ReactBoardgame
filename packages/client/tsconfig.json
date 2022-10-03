@@ -18,7 +18,7 @@
         "jsx": "react-jsx",
         "baseUrl": "."
     },
-    "include": ["src"],
+    "include": ["src", "../shared/src/gamelogic/delay.ts"],
     "exclude": ["node_modules"],
     "references": [
         { "path": "./tsconfig.node.json" },

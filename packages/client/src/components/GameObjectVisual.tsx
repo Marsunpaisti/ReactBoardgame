@@ -6,14 +6,11 @@ import {
     TextGameObject,
 } from 'shared/src/gamelogic/gamestate';
 
-export type GameObjectComponentProps = {
-    transitionDuration: number;
-};
-export type GameObjectVisualProps = AnyGameObject & GameObjectComponentProps;
-
-export const GameObjectVisual: React.FC<
-    GameObjectVisualProps & PropsWithChildren
-> = ({ children, position, transitionDuration }) => {
+export const GameObjectVisual: React.FC<AnyGameObject & PropsWithChildren> = ({
+    children,
+    position,
+    transitionDuration,
+}) => {
     return (
         <div
             className="boardItem"
@@ -34,15 +31,20 @@ export const GameObjectVisual: React.FC<
     );
 };
 
-export const TextGameObjectComponent: React.FC<
-    TextGameObject & GameObjectVisualProps
-> = (props) => {
-    return <GameObjectVisual {...props}>{props.text}</GameObjectVisual>;
+export const TextGameObjectComponent: React.FC<TextGameObject> = (props) => {
+    return (
+        <GameObjectVisual
+            {...props}
+            transitionDuration={props.transitionDuration ?? 0}
+        >
+            {props.text}
+        </GameObjectVisual>
+    );
 };
 
-export const MeepleGameObjectComponent: React.FC<
-    MeepleGameObject & GameObjectVisualProps
-> = (props) => {
+export const MeepleGameObjectComponent: React.FC<MeepleGameObject> = (
+    props,
+) => {
     return <GameObjectVisual {...props}>Meeple</GameObjectVisual>;
 };
 
@@ -51,7 +53,7 @@ export const GameObjectComponents = {
     [GameObjectTypes.TextGameObject]: TextGameObjectComponent,
 };
 
-export const RenderGameObject = (gameObject: GameObjectVisualProps) => {
+export const RenderGameObject = (gameObject: AnyGameObject) => {
     switch (gameObject.type) {
         case GameObjectTypes.MeepleGameObject:
             return (

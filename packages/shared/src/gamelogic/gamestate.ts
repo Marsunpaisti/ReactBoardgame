@@ -12,6 +12,7 @@ export enum GameObjectTypes {
 export interface BaseGameObject {
     objectId: string;
     position: Vector2;
+    transitionDuration?: number;
 }
 
 export interface TextGameObject extends BaseGameObject {
@@ -22,5 +23,11 @@ export interface TextGameObject extends BaseGameObject {
 export interface MeepleGameObject extends BaseGameObject {
     type: GameObjectTypes.MeepleGameObject;
 }
+
+export type IGameStateUpdater = (
+    updateFunction: (prev: GameState) => GameState,
+) => void;
+
+export type ITransitionDurationProvider = () => number;
 
 export type AnyGameObject = MeepleGameObject | TextGameObject;

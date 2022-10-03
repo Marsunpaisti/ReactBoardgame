@@ -78,11 +78,7 @@ export const GameBoard = () => {
                 }}
             >
                 {Object.values(gameState.gameObjects).map((gob) => {
-                    const withTransitionDuration = {
-                        ...gob,
-                        transitionDuration: 500,
-                    };
-                    return RenderGameObject(withTransitionDuration);
+                    return RenderGameObject(gob);
                 })}
             </div>
         </div>
